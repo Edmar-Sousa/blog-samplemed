@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Exceptions\UserNotFoundException;
 use App\Model\Entity\User;
 use App\Model\Table\UsersTable;
 use App\Exceptions\ValidationException;
@@ -55,6 +56,24 @@ class UsersRepository
 
         if (!$this->usersTable->save($userEntity))
             throw new ValidationException('Erro ao cadastrar usuario', $userEntity->getErrors());
+
+        return $userEntity;
+    }
+
+
+    public function getUserWithEmail(string $userEmail): User
+    {
+        $userEntity = $this->usersTable->find()
+            ->where(['email' => $userEmail])
+            ->first();
+
+        if (is_null($userEntity)) {
+            throw new UserNotFoundException('Usuario com email informado não existe', [
+                'email' => 'Email não encontrado',
+            ]);
+
+        }
+
 
         return $userEntity;
     }

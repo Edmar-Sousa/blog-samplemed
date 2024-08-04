@@ -58,7 +58,7 @@ class UsersController extends AppController
                 'message' => 'Erro interno do servidor',
             ];
 
-            $this->response = $this->response->withStatus(500);
+            $httpStatusCode = 500;
 
 
             if ($err instanceof ValidationException) {
@@ -67,8 +67,10 @@ class UsersController extends AppController
                     'details' => $err->getValidationMessages()
                 ];
 
-                $this->response = $this->response->withStatus(400);
+                $httpStatusCode = 400;
             }
+
+            $this->response = $this->response->withStatus($httpStatusCode);
 
             $this->set('error', $error);
             $this->viewBuilder()->setOption('serialize', ['error']);

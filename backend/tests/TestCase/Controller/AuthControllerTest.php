@@ -16,67 +16,29 @@ class AuthControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var list<string>
-     */
     protected array $fixtures = [
-        'app.Auth',
+        'app.Users',
     ];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\AuthController::index()
-     */
-    public function testIndex(): void
+
+    public function testIncorrectPasswordLogin()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $loginData = [
+            'email' => 'usertestemail@gmail.com',
+            'password' => '123',
+        ];
+
+
+        $this->post('/api/auth/login.json', $loginData);
+
+        $this->assertResponseError();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseArray = json_decode($responseBody, true);
+
+
+        $this->assertArrayHasKey('error', $responseArray);
     }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\AuthController::view()
-     */
-    public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\AuthController::add()
-     */
-    public function testAdd(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\AuthController::edit()
-     */
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\AuthController::delete()
-     */
-    public function testDelete(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 }

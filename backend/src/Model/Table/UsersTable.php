@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\RulesChecker;
+use ArrayObject;
 use Cake\ORM\Table;
+use Cake\ORM\RulesChecker;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
+use Cake\ORM\Query\SelectQuery;
+use Cake\Datasource\EntityInterface;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 
 /**
  * Users Model
@@ -113,5 +117,13 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
 
         return $rules;
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isNew() && !empty($entity->password))
+            $entity->password = (new DefaultPasswordHasher())->hash($entity->password);
+
+        return true;
     }
 }

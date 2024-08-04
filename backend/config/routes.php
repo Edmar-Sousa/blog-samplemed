@@ -100,6 +100,11 @@ return function (RouteBuilder $routes): void {
 
         $builder->connect('/users', ['controller' => 'Users', 'action' => 'add', '_method' => 'POST']);
 
+
+        $builder->scope('/articles', function (RouteBuilder $builder) {
+            $builder->connect('/', ['controller' => 'Articles', 'action' => 'add', '_method' => 'POST']);
+        });
+
     });
 
 };

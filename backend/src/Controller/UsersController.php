@@ -164,4 +164,36 @@ class UsersController extends AppController
 
     }
 
+
+    public function delete(string $userId)
+    {
+        try {
+            $this->usersRepository->deleteUserWithId($userId);
+            $this->response = $this->response->withStatus(204);
+
+            return $this->response;
+        } catch (Exception $err) {
+            $error = [
+                'message' => 'Erro interno do servidor',
+            ];
+
+            $statusHttpCode = 500;
+
+
+            if ($err instanceof RecordNotFoundException) {
+                $error = [
+                    'message' => 'Usuario com id informado não existe',
+                ];
+
+                $statusHttpCode = 404;
+            }
+
+
+            $this->response = $this->response->withStatus($statusHttpCode);
+
+            $this->set('error', $error);
+            $this->viewBuilder()->setOption('serialize', ['error']);
+        }
+    }
+
 }

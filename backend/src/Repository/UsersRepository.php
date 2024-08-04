@@ -25,6 +25,18 @@ class UsersRepository
     }
 
 
+
+    public function deleteUserWithId(string $userId)
+    {
+
+        $userEntity = $this->findUserWithId($userId);
+
+        if (!$this->usersTable->delete($userEntity))
+            throw new ValidationException('Erro ao deletar usuario', $userEntity->getErrors());
+
+        return $userEntity;
+    }
+
     public function updateUserWithId(string $userId, array $userData): User
     {
         $userEntity = $this->findUserWithId($userId);

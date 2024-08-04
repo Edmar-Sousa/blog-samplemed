@@ -65,29 +65,37 @@ class UsersTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('username')
-            ->maxLength('username', 50)
-            ->requirePresence('username', 'create')
-            ->notEmptyString('username')
-            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->scalar('username', 'O nome de usuário deve ser uma string.')
+            ->maxLength('username', 50, 'O nome de usuário não pode ter mais de 50 caracteres.')
+            ->requirePresence('username', 'create', 'O nome de usuário é obrigatório.')
+            ->notEmptyString('username', 'O nome de usuário não pode estar vazio.')
+            ->add('username', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+                'message' => 'Este nome de usuário já está em uso.'
+            ]);
 
         $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->scalar('name', 'O nome deve ser uma string.')
+            ->maxLength('name', 100, 'O nome não pode ter mais de 100 caracteres.')
+            ->requirePresence('name', 'create', 'O nome é obrigatório.')
+            ->notEmptyString('name', 'O nome não pode estar vazio.');
 
         $validator
-            ->scalar('password')
-            ->maxLength('password', 255)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->scalar('password', 'A senha deve ser uma string.')
+            ->maxLength('password', 255, 'A senha não pode ter mais de 255 caracteres.')
+            ->requirePresence('password', 'create', 'A senha é obrigatória.')
+            ->notEmptyString('password', 'A senha não pode estar vazia.');
 
         $validator
-            ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->email('email', false, 'O e-mail deve ser válido.')
+            ->requirePresence('email', 'create', 'O e-mail é obrigatório.')
+            ->notEmptyString('email', 'O e-mail não pode estar vazio.')
+            ->add('email', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+                'message' => 'Este e-mail já está em uso.'
+            ]);
 
         return $validator;
     }

@@ -70,7 +70,7 @@ class AuthController extends AppController
             if ($err instanceof InvalidPasswordException || $err instanceof UserNotFoundException) {
                 $error = [
                     'message' => $err->getMessage(),
-                    'details' => $err->getErrorsMessages(),
+                    'details' => $err->getErrorsMessage(),
                 ];
 
                 $httpStatusCode = 401;

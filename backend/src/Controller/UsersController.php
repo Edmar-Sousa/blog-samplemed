@@ -64,7 +64,7 @@ class UsersController extends AppController
             if ($err instanceof ValidationException) {
                 $error = [
                     'message' => $err->getMessage(),
-                    'details' => $err->getValidationMessages()
+                    'details' => $err->getErrorsMessage()
                 ];
 
                 $httpStatusCode = 400;
@@ -149,7 +149,7 @@ class UsersController extends AppController
             } else if ($err instanceof ValidationException) {
                 $error = [
                     'message' => $err->getMessage(),
-                    'details' => $err->getValidationMessages(),
+                    'details' => $err->getErrorsMessage(),
                 ];
 
                 $statusHttpCode = 400;

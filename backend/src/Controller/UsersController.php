@@ -116,4 +116,50 @@ class UsersController extends AppController
 
     }
 
+
+    public function edit(string $userId)
+    {
+
+        $this->request->allowMethod('PUT');
+
+
+        try {
+            $userData = $this->request->getData();
+            $user = $this->usersRepository->updateUserWithId($userId, $userData);
+
+            $this->set('user', $user);
+            $this->viewBuilder()->setOption('serialize', ['user']);
+        } catch (Exception $err) {
+
+            $error = [
+                'message' => 'Erro interno do servidor',
+            ];
+
+            $statusHttpCode = 500;
+
+
+            if ($err instanceof RecordNotFoundException) {
+                $error = [
+                    'message' => 'Usuario com id informado não existe',
+                ];
+
+                $statusHttpCode = 404;
+            } else if ($err instanceof ValidationException) {
+                $error = [
+                    'message' => $err->getMessage(),
+                    'details' => $err->getValidationMessages(),
+                ];
+
+                $statusHttpCode = 400;
+            }
+
+
+            $this->response = $this->response->withStatus($statusHttpCode);
+
+            $this->set('error', $error);
+            $this->viewBuilder()->setOption('serialize', ['error']);
+        }
+
+    }
+
 }

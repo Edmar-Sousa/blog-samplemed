@@ -25,6 +25,18 @@ class UsersRepository
     }
 
 
+    public function updateUserWithId(string $userId, array $userData): User
+    {
+        $userEntity = $this->findUserWithId($userId);
+        $userEntity = $this->usersTable->patchEntity($userEntity, $userData);
+
+        if (!$this->usersTable->save($userEntity))
+            throw new ValidationException('Erro ao atualizar usuario', $userEntity->getErrors());
+
+        return $userEntity;
+    }
+
+
     public function saveUser(array $userData): User
     {
         $userEntity = $this->usersTable->newEntity($userData);

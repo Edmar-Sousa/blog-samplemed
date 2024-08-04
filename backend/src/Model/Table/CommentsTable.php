@@ -63,24 +63,23 @@ class CommentsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('title')
-            ->maxLength('title', 100)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->scalar('title', 'O título deve ser uma string.')
+            ->maxLength('title', 100, 'O título não pode ter mais de 100 caracteres.')
+            ->requirePresence('title', 'create', 'O título é obrigatório.')
+            ->notEmptyString('title', 'O título não pode estar vazio.');
 
         $validator
-            ->scalar('content')
-            ->requirePresence('content', 'create')
-            ->notEmptyString('content');
+            ->scalar('content', 'O conteúdo deve ser uma string.')
+            ->requirePresence('content', 'create', 'O conteúdo é obrigatório.')
+            ->notEmptyString('content', 'O conteúdo não pode estar vazio.');
 
         $validator
-            ->uuid('article_id')
-            ->notEmptyString('article_id');
+            ->uuid('article_id', 'O ID do artigo deve ser um UUID válido.')
+            ->notEmptyString('article_id', 'O ID do artigo não pode estar vazio.');
 
         $validator
-            ->uuid('user_id')
-            ->notEmptyString('user_id');
-
+            ->uuid('user_id', 'O ID do usuário deve ser um UUID válido.')
+            ->notEmptyString('user_id', 'O ID do usuário não pode estar vazio.');
         return $validator;
     }
 

@@ -46,8 +46,35 @@ class UsersControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // user fixture
+        $this->get('/api/users/798ce3f1-7cc7-4d37-a287-940413fc93ca.json');
+
+        $this->assertResponseSuccess();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseBodyArray = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey('user', $responseBodyArray);
+
+        $this->assertEquals('teste', $responseBodyArray['user']['username']);
     }
+
+
+    public function testFindUserNotExists()
+    {
+        $this->get('/api/users/798ce3f1-7cc7-4d37-a287-940413fc93cb.json');
+
+        $this->assertResponseError();
+        $this->assertResponseCode(404);
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseBodyArray = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey('error', $responseBodyArray);
+        $this->assertArrayHasKey('message', $responseBodyArray['error']);
+
+    }
+
 
     /**
      * Test add method

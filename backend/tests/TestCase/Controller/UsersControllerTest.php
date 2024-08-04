@@ -80,6 +80,31 @@ class UsersControllerTest extends TestCase
         $this->assertEquals($userData['username'], $responseBodyArray['user']['username']);
     }
 
+
+    public function testValidationAdd()
+    {
+        $userData = [];
+
+        $this->post('/api/users.json', $userData);
+
+        $this->assertResponseError();
+        $this->assertContentType('application/json');
+
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseBodyArray = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey('error', $responseBodyArray);
+        $this->assertArrayHasKey('message', $responseBodyArray['error']);
+        $this->assertArrayHasKey('details', $responseBodyArray['error']);
+
+
+        $this->assertArrayHasKey('username', $responseBodyArray['error']['details']);
+        $this->assertArrayHasKey('name', $responseBodyArray['error']['details']);
+        $this->assertArrayHasKey('password', $responseBodyArray['error']['details']);
+        $this->assertArrayHasKey('email', $responseBodyArray['error']['details']);
+    }
+
     /**
      * Test edit method
      *

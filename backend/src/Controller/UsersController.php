@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exceptions\ValidationException;
-use App\Repository\UsersRepository;
-use Cake\View\JsonView;
 use Exception;
+use Cake\View\JsonView;
+use App\Repository\UsersRepository;
+use App\Exceptions\ValidationException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 
 class UsersController extends AppController
@@ -58,6 +59,45 @@ class UsersController extends AppController
 
                 $this->response = $this->response->withStatus(400);
             }
+
+            $this->set('error', $error);
+            $this->viewBuilder()->setOption('serialize', ['error']);
+        }
+
+
+    }
+
+
+    public function view(string $userId)
+    {
+
+        $this->request->allowMethod(['get']);
+
+
+        try {
+            $user = $this->usersRepository->findUserWithId($userId);
+
+            $this->set('user', $user);
+            $this->viewBuilder()->setOption('serialize', ['user']);
+        } catch (Exception $err) {
+
+            $error = [
+                'message' => 'Erro interno do servidor',
+            ];
+
+            $statusHttpCode = 500;
+
+
+            if ($err instanceof RecordNotFoundException) {
+                $error = [
+                    'message' => 'Usuario com id informado não existe',
+                ];
+
+                $statusHttpCode = 404;
+            }
+
+
+            $this->response = $this->response->withStatus($statusHttpCode);
 
             $this->set('error', $error);
             $this->viewBuilder()->setOption('serialize', ['error']);

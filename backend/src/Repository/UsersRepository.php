@@ -19,6 +19,12 @@ class UsersRepository
 
 
 
+    public function findUserWithId(string $userId): User
+    {
+        return $this->usersTable->get($userId);
+    }
+
+
     public function saveUser(array $userData): User
     {
         $userEntity = $this->usersTable->newEntity($userData);

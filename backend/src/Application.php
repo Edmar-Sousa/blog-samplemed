@@ -17,16 +17,20 @@ declare(strict_types=1);
 namespace App;
 
 use Cake\Core\Configure;
-use Cake\Core\ContainerInterface;
-use Cake\Datasource\FactoryLocator;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
-use Cake\Http\Middleware\BodyParserMiddleware;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Core\ContainerInterface;
 use Cake\ORM\Locator\TableLocator;
+use Cake\Datasource\FactoryLocator;
+use Authentication\AuthenticationService;
 use Cake\Routing\Middleware\AssetMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
+use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Authentication\AuthenticationServiceInterface;
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Authentication\Middleware\AuthenticationMiddleware;
 
 /**
  * Application setup class.
@@ -93,6 +97,8 @@ class Application extends BaseApplication
             // ->add(new CsrfProtectionMiddleware([
             //     'httponly' => true,
             // ]))
+
+            // ->add(new AuthenticationMiddleware($this->getAuthenticationService()))
         ;
 
         return $middlewareQueue;

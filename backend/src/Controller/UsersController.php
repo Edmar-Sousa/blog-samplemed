@@ -38,7 +38,17 @@ class UsersController extends AppController
             $userData = $this->request->getData();
             $user = $this->usersRepository->saveUser($userData);
 
-            $this->response = $this->response->withStatus(201);
+            $locationHeader = url([
+                'action' => 'view',
+                'id' => $user->id,
+                '_ext' => 'json',
+                'fullBase' => true
+            ]);
+
+            $this->response = $this->response
+                ->withStatus(201)
+                ->withAddedHeader('Location', $locationHeader);
+
 
             $this->set('user', $user);
             $this->viewBuilder()->setOption('serialize', ['user']);

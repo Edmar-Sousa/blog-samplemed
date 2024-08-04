@@ -78,4 +78,10 @@ return function (RouteBuilder $routes): void {
         $builder->fallbacks();
     });
 
+    $routes->scope('/api', function (RouteBuilder $builder) {
+
+        $builder->connect('/users', ['controller' => 'User', 'action' => 'add', '_method' => 'POST']);
+
+    });
+
 };

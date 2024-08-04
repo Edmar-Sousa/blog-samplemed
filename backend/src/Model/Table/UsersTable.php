@@ -121,7 +121,7 @@ class UsersTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($entity->isNew() && !empty($entity->password))
+        if ($entity->isDirty('password'))
             $entity->password = (new DefaultPasswordHasher())->hash($entity->password);
 
         return true;

@@ -44,9 +44,7 @@ class TagsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsToMany('Articles', [
-            'foreignKey' => 'tag_id',
-            'targetForeignKey' => 'article_id',
-            'joinTable' => 'articles_tags',
+            'through' => 'ArticlesTags',
         ]);
     }
 

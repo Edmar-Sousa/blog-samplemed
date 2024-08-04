@@ -26,8 +26,8 @@ use Cake\Routing\RouteBuilder;
 
 /*
  * This file is loaded in the context of the `Application` class.
-  * So you can use  `$this` to reference the application class instance
-  * if required.
+ * So you can use  `$this` to reference the application class instance
+ * if required.
  */
 return function (RouteBuilder $routes): void {
     /*
@@ -78,19 +78,4 @@ return function (RouteBuilder $routes): void {
         $builder->fallbacks();
     });
 
-    /*
-     * If you need a different set of middleware or none at all,
-     * open new scope and define routes there.
-     *
-     * ```
-     * $routes->scope('/api', function (RouteBuilder $builder): void {
-     *     // No $builder->applyMiddleware() here.
-     *
-     *     // Parse specified extensions from URLs
-     *     // $builder->setExtensions(['json', 'xml']);
-     *
-     *     // Connect API actions here.
-     * });
-     * ```
-     */
 };

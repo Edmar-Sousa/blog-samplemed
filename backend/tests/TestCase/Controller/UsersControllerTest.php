@@ -67,6 +67,17 @@ class UsersControllerTest extends TestCase
         $this->post('/api/users.json', $userData);
 
         $this->assertResponseSuccess('Response returned error status');
+
+        $this->assertResponseCode(201);
+        $this->assertContentType('application/json');
+
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseBodyArray = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey('user', $responseBodyArray);
+
+        $this->assertEquals($userData['username'], $responseBodyArray['user']['username']);
     }
 
     /**

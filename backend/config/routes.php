@@ -21,6 +21,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use App\Middleware\JwtAuthenticationMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
@@ -79,10 +80,21 @@ return function (RouteBuilder $routes): void {
     });
 
     $routes->setExtensions(['json']);
+    $routes->registerMiddleware('JwtAuth', new JwtAuthenticationMiddleware('1289012najhsdka1789371njshd7d2juh'));
 
     $routes->scope('/api', function (RouteBuilder $builder) {
 
-        $builder->resources('Users');
+        $builder->scope('/users', function (RouteBuilder $builder) {
+            $builder->applyMiddleware('JwtAuth');
+
+            $builder->connect('/{id}', ['controller' => 'Users', 'action' => 'edit', '_method' => 'PUT'], ['pass' => ['id']]);
+            $builder->connect('/{id}', ['controller' => 'Users', 'action' => 'view', '_method' => 'GET'], ['pass' => ['id']]);
+            $builder->connect('/{id}', ['controller' => 'Users', 'action' => 'delete', '_method' => 'DELETE'], ['pass' => ['id']]);
+
+        });
+
+        $builder->connect('/users', ['controller' => 'Users', 'action' => 'add']);
+        $builder->connect('/auth/login', ['controller' => 'Auth', 'action' => 'login']);
 
     });
 

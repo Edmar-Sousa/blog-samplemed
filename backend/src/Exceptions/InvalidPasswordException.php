@@ -5,22 +5,7 @@ namespace App\Exceptions;
 use Exception;
 
 
-class InvalidPasswordException extends Exception
+class InvalidPasswordException extends CustomException
 {
 
-    protected array $errors;
-
-    public function __construct(string $message, $errors)
-    {
-        parent::__construct($message);
-
-        $this->errors = $errors;
-    }
-
-
-
-    public function getErrorsMessages()
-    {
-        return $this->errors;
-    }
 }

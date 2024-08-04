@@ -5,21 +5,6 @@ namespace App\Exceptions;
 use Exception;
 
 
-class ValidationException extends Exception
+class ValidationException extends CustomException
 {
-
-    protected array $errors;
-
-    public function __construct(string $message, array $errors)
-    {
-        parent::__construct($message);
-
-        $this->errors = $errors;
-    }
-
-
-    public function getValidationMessages(): array
-    {
-        return $this->errors;
-    }
 }

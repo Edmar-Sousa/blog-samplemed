@@ -30,7 +30,7 @@ class UsersController extends AppController
     public function add()
     {
 
-        $this->request->allowMethod(['post']);
+        $this->request->allowMethod(['POST']);
 
 
         try {
@@ -80,14 +80,14 @@ class UsersController extends AppController
     }
 
 
-    public function view(string $userId)
+    public function view(string $id)
     {
 
-        $this->request->allowMethod(['get']);
+        $this->request->allowMethod(['GET']);
 
 
         try {
-            $user = $this->usersRepository->findUserWithId($userId);
+            $user = $this->usersRepository->findUserWithId($id);
 
             $this->set('user', $user);
             $this->viewBuilder()->setOption('serialize', ['user']);
@@ -122,7 +122,7 @@ class UsersController extends AppController
     public function edit(string $userId)
     {
 
-        $this->request->allowMethod('PUT');
+        $this->request->allowMethod(['PUT']);
 
 
         try {
@@ -167,6 +167,8 @@ class UsersController extends AppController
 
     public function delete(string $userId)
     {
+        $this->request->allowMethod(['DELETE']);
+
         try {
             $this->usersRepository->deleteUserWithId($userId);
             $this->response = $this->response->withStatus(204);

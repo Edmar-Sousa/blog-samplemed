@@ -24,63 +24,21 @@ class ArticlesControllerTest extends TestCase
     protected array $fixtures = [
         'app.Articles',
         'app.Users',
-        'app.Comments',
-        'app.Tags',
-        'app.ArticlesTags',
     ];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\ArticlesController::index()
-     */
-    public function testIndex(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\ArticlesController::view()
-     */
-    public function testView(): void
+    public function testAddArticle()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $articleData = [
+            'title' => 'title writing in markdown',
+            'content' => 'Content with **markdown**',
+            'banner_image' => '/path/to/image.png',
+            'user_id' => '798ce3f1-7cc7-4d37-a287-940413fc93ca',
+        ];
 
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\ArticlesController::add()
-     */
-    public function testAdd(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\ArticlesController::edit()
-     */
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $this->post('/api/articles.json', $articleData);
 
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\ArticlesController::delete()
-     */
-    public function testDelete(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->assertResponseSuccess();
     }
 }

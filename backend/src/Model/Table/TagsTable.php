@@ -57,10 +57,10 @@ class TagsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('title')
-            ->maxLength('title', 255)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->scalar('title', 'O título deve ser uma string.')
+            ->maxLength('title', 255, 'O título não pode ter mais de 255 caracteres.')
+            ->requirePresence('title', 'create', 'O título é obrigatório.')
+            ->notEmptyString('title', 'O título não pode estar vazio.');
 
         return $validator;
     }

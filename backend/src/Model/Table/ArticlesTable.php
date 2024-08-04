@@ -70,25 +70,26 @@ class ArticlesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('title')
-            ->maxLength('title', 255)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->scalar('title', 'O título deve ser uma string.')
+            ->maxLength('title', 255, 'O título não pode ter mais de 255 caracteres.')
+            ->requirePresence('title', 'create', 'O título é obrigatório.')
+            ->notEmptyString('title', 'O título não pode estar vazio.');
 
         $validator
-            ->scalar('content')
-            ->requirePresence('content', 'create')
-            ->notEmptyString('content');
+            ->scalar('content', 'O conteúdo deve ser uma string.')
+            ->requirePresence('content', 'create', 'O conteúdo é obrigatório.')
+            ->notEmptyString('content', 'O conteúdo não pode estar vazio.');
 
         $validator
-            ->scalar('banner_image')
-            ->maxLength('banner_image', 255)
-            ->requirePresence('banner_image', 'create')
-            ->notEmptyFile('banner_image');
+            ->scalar('banner_image', 'A imagem de banner deve ser uma string.')
+            ->maxLength('banner_image', 255, 'A imagem de banner não pode ter mais de 255 caracteres.')
+            ->requirePresence('banner_image', 'create', 'A imagem de banner é obrigatória.')
+            ->notEmptyFile('banner_image', 'A imagem de banner não pode estar vazia.');
 
         $validator
-            ->uuid('user_id')
-            ->notEmptyString('user_id');
+            ->uuid('user_id', 'O ID do usuário deve ser um UUID válido.')
+            ->notEmptyString('user_id', 'O ID do usuário não pode estar vazio.');
+
 
         return $validator;
     }

@@ -140,8 +140,24 @@ class UsersControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $userData = [
+            'username' => 'update_user',
+            'name' => 'Update user',
+            'email' => 'testeupdate10@gmail.com',
+        ];
+
+        $this->put('/api/users/798ce3f1-7cc7-4d37-a287-940413fc93ca.json', $userData);
+
+        $this->assertResponseSuccess();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseBodyArray = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey('user', $responseBodyArray);
+        $this->assertEquals($userData['username'], $responseBodyArray['user']['username']);
+
     }
+
 
     /**
      * Test delete method

@@ -80,9 +80,14 @@ return function (RouteBuilder $routes): void {
     });
 
     $routes->setExtensions(['json']);
-    $routes->registerMiddleware('JwtAuth', new JwtAuthenticationMiddleware('1289012najhsdka1789371njshd7d2juh'));
+    $routes->registerMiddleware(
+        'JwtAuth',
+        new JwtAuthenticationMiddleware(env('SERCRET_KEY'))
+    );
 
     $routes->scope('/api', function (RouteBuilder $builder) {
+
+        $builder->connect('/auth/login', ['controller' => 'Auth', 'action' => 'login']);
 
         $builder->scope('/users', function (RouteBuilder $builder) {
             $builder->applyMiddleware('JwtAuth');
@@ -93,8 +98,7 @@ return function (RouteBuilder $routes): void {
 
         });
 
-        $builder->connect('/users', ['controller' => 'Users', 'action' => 'add']);
-        $builder->connect('/auth/login', ['controller' => 'Auth', 'action' => 'login']);
+        $builder->connect('/users', ['controller' => 'Users', 'action' => 'add', '_method' => 'POST']);
 
     });
 

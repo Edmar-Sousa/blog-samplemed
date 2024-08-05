@@ -69,4 +69,19 @@ class ArticlesControllerTest extends TestCase
         $this->assertArrayHasKey('details', $responseArray['error']);
         $this->assertArrayHasKey('message', $responseArray['error']);
     }
+
+
+    public function testViewArticle()
+    {
+        $this->get('/api/articles/8a83dbe9-cfdb-426c-bd0e-fcea336093ff.json');
+
+        $this->assertResponseSuccess();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseArray = json_decode($responseBody, true);
+
+
+        $this->assertArrayHasKey('article', $responseArray);
+        $this->assertEquals('8a83dbe9-cfdb-426c-bd0e-fcea336093ff', $responseArray['article']['id']);
+    }
 }

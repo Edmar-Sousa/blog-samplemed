@@ -72,4 +72,10 @@ class ArticlesController extends AppController
         }
     }
 
+
+
+    public function view(string $id)
+    {
+
+    }
 }

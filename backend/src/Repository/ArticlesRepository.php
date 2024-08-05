@@ -50,4 +50,16 @@ class ArticlesRepository
 
         return $articleEntity;
     }
+
+
+    public function deleteArticleWithId(string $articleId)
+    {
+
+        $articleEntity = $this->getArticleWithId($articleId);
+
+        if (!$this->articlesTable->delete($articleEntity))
+            throw new ValidationException('Erro ao deletar artigo', $articleEntity->getErrors());
+
+        return $articleEntity;
+    }
 }

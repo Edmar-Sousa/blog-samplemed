@@ -152,4 +152,39 @@ class ArticlesController extends AppController
         }
 
     }
+
+
+    public function delete(string $articleId)
+    {
+
+        $this->request->allowMethod(['DELETE']);
+
+        try {
+            $this->articlesRepository->deleteArticleWithId($articleId);
+            $this->response = $this->response->withStatus(204);
+
+            return $this->response;
+        } catch (Exception $err) {
+
+            $error = [
+                'message' => 'Error interno no servidor'
+            ];
+
+            $httpStatusCode = 500;
+
+            if ($err instanceof RecordNotFoundException) {
+                $error = [
+                    'message' => 'Artigo não encontrado',
+                ];
+
+                $httpStatusCode = 404;
+            }
+
+            $this->response = $this->response->withStatus($httpStatusCode);
+
+            $this->set('error', $error);
+            $this->viewBuilder()->setOption('serialize', ['error']);
+        }
+
+    }
 }

@@ -105,6 +105,7 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/', ['controller' => 'Articles', 'action' => 'add', '_method' => 'POST']);
             $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'view', '_method' => 'GET'], ['pass' => ['id']]);
             $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'edit', '_method' => 'PUT'], ['pass' => ['id']]);
+            $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'delete', '_method' => 'DELETE'], ['pass' => ['id']]);
         });
 
     });

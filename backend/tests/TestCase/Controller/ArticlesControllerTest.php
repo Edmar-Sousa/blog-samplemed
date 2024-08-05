@@ -40,5 +40,33 @@ class ArticlesControllerTest extends TestCase
         $this->post('/api/articles.json', $articleData);
 
         $this->assertResponseSuccess();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseArray = json_decode($responseBody, true);
+
+
+        $this->assertArrayHasKey('article', $responseArray);
+    }
+
+    public function testValidationArticle()
+    {
+        $articleData = [
+            'content' => 'Content with **markdown**',
+            'banner_image' => '/path/to/image.png',
+            'user_id' => '798ce3f1-7cc7-4d37-a287-940413fc93ca',
+        ];
+
+
+        $this->post('/api/articles.json', $articleData);
+
+        $this->assertResponseError();
+
+        $responseBody = (string) $this->_response->getBody();
+        $responseArray = json_decode($responseBody, true);
+
+
+        $this->assertArrayHasKey('error', $responseArray);
+        $this->assertArrayHasKey('details', $responseArray['error']);
+        $this->assertArrayHasKey('message', $responseArray['error']);
     }
 }

@@ -103,6 +103,7 @@ return function (RouteBuilder $routes): void {
 
         $builder->scope('/articles', function (RouteBuilder $builder) {
             $builder->connect('/', ['controller' => 'Articles', 'action' => 'add', '_method' => 'POST']);
+            $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'view', '_method' => 'GET'], ['pass' => ['id']]);
         });
 
     });

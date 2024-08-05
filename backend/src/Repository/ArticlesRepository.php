@@ -30,4 +30,9 @@ class ArticlesRepository
     }
 
 
+    public function getArticleWithId(string $articleId): Article
+    {
+        return $this->articlesTable->get($articleId);
+    }
+
 }

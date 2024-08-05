@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Exceptions\ArticleNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Model\Table\ArticlesTable;
@@ -52,10 +53,20 @@ class ArticlesRepository
     }
 
 
-    public function deleteArticleWithId(string $articleId)
+    public function deleteArticleWithId(string $articleId, string $userId)
     {
 
-        $articleEntity = $this->getArticleWithId($articleId);
+        $articleEntity = $this->articlesTable->find($articleId)
+            ->where(['user_id' => $userId])
+            ->first();
+
+        if (is_null($articleEntity)) {
+            throw new ArticleNotFoundException(
+                'Artigo não encontrado ou não pertence a esse usuario',
+            );
+
+        }
+
 
         if (!$this->articlesTable->delete($articleEntity))
             throw new ValidationException('Erro ao deletar artigo', $articleEntity->getErrors());

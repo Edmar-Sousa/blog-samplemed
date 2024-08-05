@@ -49,7 +49,11 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
         if ($token) {
 
             try {
-                JWT::decode($token, new Key($this->secretKey, 'HS256'));
+                $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
+
+                if (isset($decoded->user))
+                    $request->withAttribute('user', $decoded->user);
+
             } catch (ExpiredException $e) {
                 return $this->sendErrorResponse('Token expirado');
             } catch (SignatureInvalidException $e) {

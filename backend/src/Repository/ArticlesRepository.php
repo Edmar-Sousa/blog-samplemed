@@ -35,4 +35,19 @@ class ArticlesRepository
         return $this->articlesTable->get($articleId);
     }
 
+
+
+    public function updateArticleWithId(string $articleId, array $articleData)
+    {
+
+        $articleEntity = $this->getArticleWithId($articleId);
+        $articleEntity = $this->articlesTable->patchEntity($articleEntity, $articleData);
+
+
+        if (!$this->articlesTable->save($articleEntity))
+            throw new ValidationException('Erro ao atualizar o artigo', $articleEntity->getErrors());
+
+
+        return $articleEntity;
+    }
 }

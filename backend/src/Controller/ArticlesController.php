@@ -78,12 +78,12 @@ class ArticlesController extends AppController
 
 
 
-    public function view(string $id)
+    public function view(string $articleId)
     {
         $this->request->allowMethod(['GET']);
 
         try {
-            $article = $this->articlesRepository->getArticleWithId($id);
+            $article = $this->articlesRepository->getArticleWithId($articleId);
 
             $this->set('article', $article);
             $this->viewBuilder()->setOption('serialize', ['article']);
@@ -108,5 +108,48 @@ class ArticlesController extends AppController
             $this->set('error', $error);
             $this->viewBuilder()->setOption('serialize', ['error']);
         }
+    }
+
+
+    public function edit(string $articleId)
+    {
+        $this->request->allowMethod(['PUT']);
+
+        try {
+            $articleData = $this->request->getData();
+            $article = $this->articlesRepository->updateArticleWithId($articleId, $articleData);
+
+            $this->set('article', $article);
+            $this->viewBuilder()->setOption('serialize', ['article']);
+        } catch (Exception $err) {
+
+            $error = [
+                'message' => 'Error interno no servidor',
+            ];
+
+            $httpStatusCode = 500;
+
+            if ($err instanceof ValidationException) {
+                $error = [
+                    'message' => $err->getMessage(),
+                    'details' => $err->getErrorsMessage(),
+                ];
+
+                $httpStatusCode = 400;
+
+            } else if ($err instanceof RecordNotFoundException) {
+                $error = [
+                    'message' => 'Artigo não encontrado',
+                ];
+
+                $httpStatusCode = 404;
+            }
+
+            $this->response = $this->response->withStatus($httpStatusCode);
+
+            $this->set('error', $error);
+            $this->viewBuilder()->setOption('serialize', ['error']);
+        }
+
     }
 }

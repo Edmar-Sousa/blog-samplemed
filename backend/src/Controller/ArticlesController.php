@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exceptions\ArticleNotFoundException;
 use Cake\View\JsonView;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use App\Repository\ArticlesRepository;
@@ -158,9 +159,23 @@ class ArticlesController extends AppController
     {
 
         $this->request->allowMethod(['DELETE']);
+        $userId = $this->request->getAttribute('user');
+
+
+        if (is_null($userId)) {
+            $error = [
+                'message' => 'Usuario não esta authenticado',
+            ];
+
+            $this->response = $this->response->withStatus(401)
+                ->withType('application/json')
+                ->withStringBody(json_encode($error));
+
+            return $this->response;
+        }
 
         try {
-            $this->articlesRepository->deleteArticleWithId($articleId);
+            $this->articlesRepository->deleteArticleWithId($articleId, $userId);
             $this->response = $this->response->withStatus(204);
 
             return $this->response;
@@ -175,6 +190,12 @@ class ArticlesController extends AppController
             if ($err instanceof RecordNotFoundException) {
                 $error = [
                     'message' => 'Artigo não encontrado',
+                ];
+
+                $httpStatusCode = 404;
+            } else if ($err instanceof ArticleNotFoundException) {
+                $error = [
+                    'message' => $err->getMessage(),
                 ];
 
                 $httpStatusCode = 404;

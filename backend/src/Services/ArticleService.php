@@ -62,7 +62,7 @@ class ArticleService
     }
 
 
-    private function updateArticle(string $articleId, array $articleData)
+    public function updateArticle(string $articleId, array $articleData)
     {
         $response = new Response();
         $article = $this->articlesRepository->updateArticleWithId($articleId, $articleData);

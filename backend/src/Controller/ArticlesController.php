@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Repository\TagsRepository;
 use App\Repository\UsersRepository;
 use Exception;
 use Cake\View\JsonView;
@@ -25,14 +26,18 @@ class ArticlesController extends AppController
     {
         parent::initialize();
 
+        $userTable = TableRegistry::getTableLocator()->get('Users');
+        $tagsTable = TableRegistry::getTableLocator()->get('Tags');
+
         $this->articleService = new ArticleService(
-            new ArticlesRepository($this->Articles)
+            new ArticlesRepository(
+                $this->Articles,
+                new TagsRepository($tagsTable)
+            ),
         );
 
         $this->userService = new UserService(
-            new UsersRepository(
-                TableRegistry::getTableLocator()->get('Users')
-            )
+            new UsersRepository($userTable)
         );
     }
 

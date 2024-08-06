@@ -10,11 +10,12 @@ use App\Model\Table\ArticlesTable;
 class ArticlesRepository
 {
     protected ArticlesTable $articlesTable;
+    protected TagsRepository $tagsRepository;
 
-
-    public function __construct(ArticlesTable $articlesTable)
+    public function __construct(ArticlesTable $articlesTable, TagsRepository $tagsRepository)
     {
         $this->articlesTable = $articlesTable;
+        $this->tagsRepository = $tagsRepository;
     }
 
 
@@ -22,6 +23,9 @@ class ArticlesRepository
     public function saveArticle(array $articleData): Article
     {
         $articleEntity = $this->articlesTable->newEntity($articleData);
+
+        $tags = $this->tagsRepository->getTagsWithName($articleData['tags'], $articleEntity);
+        $articleEntity->tags = $tags;
 
         if (!$this->articlesTable->save($articleEntity))
             throw new ValidationException('Erro ao criar o artigo', $articleEntity->getErrors());

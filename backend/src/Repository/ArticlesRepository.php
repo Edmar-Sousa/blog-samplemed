@@ -52,6 +52,10 @@ class ArticlesRepository
                 'Tags' => [
                     'fields' => ['Tags.id', 'Tags.title']
                 ],
+
+                'Users' => [
+                    'fields' => ['Users.id', 'Users.username', 'Users.name'],
+                ]
             ]
         ]);
 

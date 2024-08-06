@@ -72,13 +72,13 @@ class ArticlesController extends AppController
     {
         $this->request->allowMethod(['GET']);
 
-        try {
-            return $this->articleService->viewArticleWithId($articleId);
+        // try {
+        return $this->articleService->viewArticleWithId($articleId);
 
-        } catch (Exception $err) {
+        // } catch (Exception $err) {
 
-            return $this->articleService->handlerException($err);
-        }
+        //     return $this->articleService->handlerException($err);
+        // }
     }
 
 

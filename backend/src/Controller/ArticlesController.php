@@ -73,38 +73,11 @@ class ArticlesController extends AppController
 
         try {
             $articleData = $this->request->getData();
-            $article = $this->articlesRepository->updateArticleWithId($articleId, $articleData);
+            $this->articleService->updateArticle($articleId, $articleData);
 
-            $this->set('article', $article);
-            $this->viewBuilder()->setOption('serialize', ['article']);
         } catch (Exception $err) {
 
-            $error = [
-                'message' => 'Error interno no servidor',
-            ];
-
-            $httpStatusCode = 500;
-
-            if ($err instanceof ValidationException) {
-                $error = [
-                    'message' => $err->getMessage(),
-                    'details' => $err->getErrorsMessage(),
-                ];
-
-                $httpStatusCode = 400;
-
-            } else if ($err instanceof RecordNotFoundException) {
-                $error = [
-                    'message' => 'Artigo não encontrado',
-                ];
-
-                $httpStatusCode = 404;
-            }
-
-            $this->response = $this->response->withStatus($httpStatusCode);
-
-            $this->set('error', $error);
-            $this->viewBuilder()->setOption('serialize', ['error']);
+            return $this->articleService->handlerException($err);
         }
 
     }

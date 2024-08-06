@@ -102,6 +102,8 @@ return function (RouteBuilder $routes): void {
 
 
         $builder->scope('/articles', function (RouteBuilder $builder) {
+            $builder->applyMiddleware('JwtAuth');
+
             $builder->connect('/', ['controller' => 'Articles', 'action' => 'add', '_method' => 'POST']);
             $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'view', '_method' => 'GET'], ['pass' => ['id']]);
             $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'edit', '_method' => 'PUT'], ['pass' => ['id']]);

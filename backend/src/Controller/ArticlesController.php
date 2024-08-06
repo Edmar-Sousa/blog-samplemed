@@ -3,31 +3,36 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exceptions\ArticleNotFoundException;
-use App\Services\ArticleService;
-use Cake\Http\Response;
-use Cake\View\JsonView;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use App\Repository\ArticlesRepository;
-use App\Exceptions\ValidationException;
 
+use App\Repository\UsersRepository;
 use Exception;
+use Cake\View\JsonView;
+use Cake\ORM\TableRegistry;
+use App\Services\UserService;
+
+use App\Services\ArticleService;
+use App\Repository\ArticlesRepository;
 
 
 class ArticlesController extends AppController
 {
 
     protected ArticleService $articleService;
-    protected ArticlesRepository $articlesRepository;
+    protected UserService $userService;
 
 
     public function initialize(): void
     {
         parent::initialize();
 
-        $this->articlesRepository = new ArticlesRepository($this->Articles);
         $this->articleService = new ArticleService(
             new ArticlesRepository($this->Articles)
+        );
+
+        $this->userService = new UserService(
+            new UsersRepository(
+                TableRegistry::getTableLocator()->get('Users')
+            )
         );
     }
 
@@ -90,21 +95,8 @@ class ArticlesController extends AppController
         $this->request->allowMethod(['DELETE']);
         $userId = $this->request->getAttribute('user');
 
-
-
-        if (is_null($userId)) {
-            $error = [
-                'message' => 'Usuario não esta authenticado',
-            ];
-
-            $this->response = $this->response->withStatus(401)
-                ->withType('application/json')
-                ->withStringBody(json_encode($error));
-
-            return $this->response;
-        }
-
         try {
+            $this->userService->checkIdUserLogged($userId);
 
             return $this->articleService->deleteArticle($articleId, $userId);
 

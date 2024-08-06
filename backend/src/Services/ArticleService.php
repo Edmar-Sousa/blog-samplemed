@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\ArticleNotFoundException;
+use App\Exceptions\UserNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Repository\ArticlesRepository;
@@ -97,7 +98,7 @@ class ArticleService
         $this->serializeResponse($response, 404, $error);
     }
 
-    private function handlerArticleNotFoundException(Response $response, ArticleNotFoundException $err)
+    private function handlerArticleNotFoundException(Response &$response, ArticleNotFoundException|UserNotFoundException $err)
     {
         $error = [
             'message' => $err->getMessage(),
@@ -136,7 +137,7 @@ class ArticleService
             $this->handlerNotFoundException($response);
         else if ($err instanceof ValidationException)
             $this->handlerValidationExceptio($response, $err);
-        else if ($err instanceof ArticleNotFoundException)
+        else if ($err instanceof ArticleNotFoundException || $err instanceof UserNotFoundException)
             $this->handlerArticleNotFoundException($response, $err);
         else
             $this->handlerInternalError($response);

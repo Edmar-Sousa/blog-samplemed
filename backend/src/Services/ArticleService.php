@@ -7,6 +7,8 @@ use App\Exceptions\UserNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Repository\ArticlesRepository;
+use Cake\Datasource\Paging\PaginatedInterface;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Exception;
 
@@ -22,7 +24,7 @@ class ArticleService
 
 
 
-    private function serializeResponse(Response &$response, int $statusCode, array|Article|null $body = null)
+    private function serializeResponse(Response &$response, int $statusCode, array|Article|PaginatedInterface|null $body = null)
     {
         $response = $response->withStatus($statusCode)
             ->withType('application/json');
@@ -32,6 +34,17 @@ class ArticleService
             $response = $response->withStringBody(json_encode($body));
     }
 
+
+
+    public function getLatestArticles(int $page, int $perPage)
+    {
+        $response = new Response();
+
+        $articles = $this->articlesRepository->getLatestArticles($page, $perPage);
+
+        $this->serializeResponse($response, 200, $articles);
+        return $response;
+    }
 
 
     public function viewArticleWithId(string $articleId)
@@ -128,6 +141,16 @@ class ArticleService
         $this->serializeResponse($response, 404, $error);
     }
 
+
+    private function handlerPaginatorError(Response &$response)
+    {
+        $error = [
+            'message' => 'Erro de paginação',
+        ];
+
+        $this->serializeResponse($response, 500, $error);
+    }
+
     public function handlerException(Exception &$err)
     {
         $response = new Response();
@@ -139,6 +162,8 @@ class ArticleService
             $this->handlerValidationExceptio($response, $err);
         else if ($err instanceof ArticleNotFoundException || $err instanceof UserNotFoundException)
             $this->handlerArticleNotFoundException($response, $err);
+        else if ($err instanceof NotFoundException)
+            $this->handlerPaginatorError($response);
         else
             $this->handlerInternalError($response);
 

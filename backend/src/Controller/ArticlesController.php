@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Repository\TagsRepository;
 use App\Repository\UsersRepository;
+use Cake\Http\Response;
 use Exception;
 use Cake\View\JsonView;
 use Cake\ORM\TableRegistry;
@@ -14,6 +15,7 @@ use App\Services\UserService;
 use App\Services\ArticleService;
 use App\Repository\ArticlesRepository;
 
+use Cake\Datasource\Paging\SimplePaginator;
 
 class ArticlesController extends AppController
 {
@@ -48,6 +50,21 @@ class ArticlesController extends AppController
     }
 
 
+
+    public function index()
+    {
+        $page = $this->request->getQuery('page', 1);
+        $perPage = $this->request->getQuery('per_page', 10);
+
+        try {
+            $articles = $this->articleService->getLatestArticles($page, $perPage);
+            return $articles;
+        } catch (Exception $err) {
+            return $this->articleService->handlerException($err);
+        }
+    }
+
+
     public function add()
     {
         $this->request->allowMethod(['POST']);
@@ -72,13 +89,13 @@ class ArticlesController extends AppController
     {
         $this->request->allowMethod(['GET']);
 
-        // try {
-        return $this->articleService->viewArticleWithId($articleId);
+        try {
+            return $this->articleService->viewArticleWithId($articleId);
 
-        // } catch (Exception $err) {
+        } catch (Exception $err) {
 
-        //     return $this->articleService->handlerException($err);
-        // }
+            return $this->articleService->handlerException($err);
+        }
     }
 
 

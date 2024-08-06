@@ -7,6 +7,8 @@ use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Model\Table\ArticlesTable;
 
+use Cake\Datasource\Paging\SimplePaginator;
+
 class ArticlesRepository
 {
     protected ArticlesTable $articlesTable;
@@ -27,6 +29,28 @@ class ArticlesRepository
     }
 
 
+    public function getLatestArticles(int $page, int $perPage)
+    {
+        $paginator = new SimplePaginator();
+
+        $articleQuery = $this->articlesTable->find()
+            ->contain([
+                'Users' => [
+                    'fields' => ['Users.id', 'Users.username', 'Users.name'],
+                ]
+            ])
+            ->orderDesc('Articles.created');
+
+        $articles = $paginator->paginate($articleQuery, [
+            'page' => $page,
+            'limit' => $perPage,
+            'sortWhitelist' => ['created'],
+        ]);
+
+
+        return $articles;
+
+    }
 
     public function saveArticle(array $articleData, string $userId): Article
     {

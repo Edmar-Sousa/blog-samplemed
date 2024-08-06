@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.0.4",
+    "axios": "^1.7.3",
+    "pinia": "^2.2.1",
     "primevue": "^4.0.4",
-    "vue": "^3.4.31"
+    "vue": "^3.4.31",
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

@@ -20,17 +20,26 @@ class ArticlesRepository
 
 
 
+    private function clearEntity(Article &$articleEntity)
+    {
+        foreach ($articleEntity->tags as &$tag)
+            unset($tag->_joinData);
+    }
+
+
+
     public function saveArticle(array $articleData, string $userId): Article
     {
         $articleEntity = $this->articlesTable->newEntity($articleData);
+        $tags = $this->tagsRepository->getTagsWithName($articleData['tags'], $articleEntity);
 
         $articleEntity->user_id = $userId;
-        $tags = $this->tagsRepository->getTagsWithName($articleData['tags'], $articleEntity);
         $articleEntity->tags = $tags;
 
         if (!$this->articlesTable->save($articleEntity))
             throw new ValidationException('Erro ao criar o artigo', $articleEntity->getErrors());
 
+        $this->clearEntity($articleEntity);
 
         return $articleEntity;
     }
@@ -47,9 +56,7 @@ class ArticlesRepository
         ]);
 
 
-        foreach ($articleEntity->tags as &$tag)
-            unset($tag->_joinData);
-
+        $this->clearEntity($articleEntity);
 
         return $articleEntity;
     }

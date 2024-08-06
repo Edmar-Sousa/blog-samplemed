@@ -51,10 +51,14 @@ class ArticlesController extends AppController
     public function add()
     {
         $this->request->allowMethod(['POST']);
+        $userId = $this->request->getAttribute('user');
+
 
         try {
+            $this->userService->checkIdUserLogged($userId);
+
             $articleData = $this->request->getData();
-            return $this->articleService->createArticle($articleData);
+            return $this->articleService->createArticle($articleData, $userId);
 
         } catch (Exception $err) {
 

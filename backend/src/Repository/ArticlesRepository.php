@@ -20,10 +20,11 @@ class ArticlesRepository
 
 
 
-    public function saveArticle(array $articleData): Article
+    public function saveArticle(array $articleData, string $userId): Article
     {
         $articleEntity = $this->articlesTable->newEntity($articleData);
 
+        $articleEntity->user_id = $userId;
         $tags = $this->tagsRepository->getTagsWithName($articleData['tags'], $articleEntity);
         $articleEntity->tags = $tags;
 

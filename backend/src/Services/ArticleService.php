@@ -47,10 +47,10 @@ class ArticleService
 
 
 
-    public function createArticle(array $articleData)
+    public function createArticle(array $articleData, string $userId)
     {
         $response = new Response();
-        $article = $this->articlesRepository->saveArticle($articleData);
+        $article = $this->articlesRepository->saveArticle($articleData, $userId);
 
         $locationHeader = url([
             'action' => 'view',

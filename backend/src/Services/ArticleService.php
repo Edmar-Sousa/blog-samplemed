@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Repository\ArticlesRepository;
 use Cake\Http\Response;
@@ -41,6 +42,26 @@ class ArticleService
 
 
 
+    public function createArticle(array $articleData)
+    {
+        $response = new Response();
+        $article = $this->articlesRepository->saveArticle($articleData);
+
+        $locationHeader = url([
+            'action' => 'view',
+            'id' => $article->id,
+            '_ext' => 'json',
+            'fullBase' => true
+        ]);
+
+
+        $this->response = $response->withAddedHeader('Location', $locationHeader);
+        $this->serializeResponse($response, 201, $article);
+
+        return $response;
+    }
+
+
     private function handlerNotFoundException(Response &$response)
     {
         $error = [
@@ -61,6 +82,16 @@ class ArticleService
     }
 
 
+    private function handlerValidationExceptio(Response &$response, ValidationException &$err)
+    {
+        $error = [
+            'message' => $err->getMessage(),
+            'details' => $err->getErrorsMessage(),
+        ];
+
+        $this->serializeResponse($response, 404, $error);
+    }
+
     public function handlerException(Exception &$err)
     {
         $response = new Response();
@@ -68,6 +99,8 @@ class ArticleService
 
         if ($err instanceof RecordNotFoundException)
             $this->handlerNotFoundException($response);
+        else if ($err instanceof ValidationException)
+            $this->handlerValidationExceptio($response, $err);
         else
             $this->handlerInternalError($response);
 

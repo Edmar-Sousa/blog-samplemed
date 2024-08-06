@@ -42,44 +42,12 @@ class ArticlesController extends AppController
         $this->request->allowMethod(['POST']);
 
         try {
-
             $articleData = $this->request->getData();
+            return $this->articleService->createArticle($articleData);
 
-            $article = $this->articlesRepository->saveArticle($articleData);
-
-            $locationHeader = url([
-                'action' => 'view',
-                'id' => $article->id,
-                '_ext' => 'json',
-                'fullBase' => true
-            ]);
-
-
-            $this->response = $this->response->withStatus(201)
-                ->withAddedHeader('Location', $locationHeader);
-
-            $this->set('article', $article);
-            $this->viewBuilder()->setOption('serialize', ['article']);
         } catch (Exception $err) {
-            $error = [
-                'message' => 'Erro interno no servidor'
-            ];
 
-            $httpStatusCode = 500;
-
-            if ($err instanceof ValidationException) {
-                $error = [
-                    'message' => $err->getMessage(),
-                    'details' => $err->getErrorsMessage(),
-                ];
-
-                $httpStatusCode = 400;
-            }
-
-            $this->response = $this->response->withStatus($httpStatusCode);
-
-            $this->set('error', $error);
-            $this->viewBuilder()->setOption('serialize', ['error']);
+            return $this->articleService->handlerException($err);
         }
     }
 

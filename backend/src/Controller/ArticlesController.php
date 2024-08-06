@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exceptions\ArticleNotFoundException;
+use App\Services\ArticleService;
 use Cake\View\JsonView;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use App\Repository\ArticlesRepository;
@@ -15,13 +16,18 @@ use Exception;
 class ArticlesController extends AppController
 {
 
+    protected ArticleService $articleService;
     protected ArticlesRepository $articlesRepository;
 
 
     public function initialize(): void
     {
         parent::initialize();
+
         $this->articlesRepository = new ArticlesRepository($this->Articles);
+        $this->articleService = new ArticleService(
+            new ArticlesRepository($this->Articles)
+        );
     }
 
 
@@ -84,30 +90,11 @@ class ArticlesController extends AppController
         $this->request->allowMethod(['GET']);
 
         try {
-            $article = $this->articlesRepository->getArticleWithId($articleId);
+            return $this->articleService->viewArticleWithId($articleId);
 
-            $this->set('article', $article);
-            $this->viewBuilder()->setOption('serialize', ['article']);
         } catch (Exception $err) {
-            $error = [
-                'message' => 'Error interno no servidor',
-            ];
 
-            $httpStatusCode = 500;
-
-            if ($err instanceof RecordNotFoundException) {
-                $error = [
-                    'message' => 'Artigo não encontrado',
-                ];
-
-                $httpStatusCode = 404;
-            }
-
-
-            $this->response = $this->response->withStatus($httpStatusCode);
-
-            $this->set('error', $error);
-            $this->viewBuilder()->setOption('serialize', ['error']);
+            return $this->articleService->handlerException($err);
         }
     }
 

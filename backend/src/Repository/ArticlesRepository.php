@@ -37,7 +37,20 @@ class ArticlesRepository
 
     public function getArticleWithId(string $articleId): Article
     {
-        return $this->articlesTable->get($articleId);
+        $articleEntity = $this->articlesTable->get($articleId, [
+            'contain' => [
+                'Tags' => [
+                    'fields' => ['Tags.id', 'Tags.title']
+                ],
+            ]
+        ]);
+
+
+        foreach ($articleEntity->tags as &$tag)
+            unset($tag->_joinData);
+
+
+        return $articleEntity;
     }
 
 

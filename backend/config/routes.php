@@ -110,6 +110,9 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/{id}', ['controller' => 'Articles', 'action' => 'delete', '_method' => 'DELETE'], ['pass' => ['id']]);
         });
 
+        $builder->connect('/articles', ['controller' => 'Articles', 'action' => 'index', '_method' => 'GET']);
+
+
     });
 
 };

@@ -37,7 +37,7 @@ class JwtRepository
     public function generateToken(string $userId)
     {
         $payload = [
-            'user' => '45afcfab-1bbe-469b-a766-be7203d12839',
+            'user' => $userId,
             'exp' => time() + 3600
         ];
 

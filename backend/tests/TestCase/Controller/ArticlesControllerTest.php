@@ -45,7 +45,7 @@ class ArticlesControllerTest extends TestCase
         $responseArray = json_decode($responseBody, true);
 
 
-        $this->assertArrayHasKey('article', $responseArray);
+        $this->assertArrayHasKey('id', $responseArray);
     }
 
     public function testValidationArticle()
@@ -65,9 +65,8 @@ class ArticlesControllerTest extends TestCase
         $responseArray = json_decode($responseBody, true);
 
 
-        $this->assertArrayHasKey('error', $responseArray);
-        $this->assertArrayHasKey('details', $responseArray['error']);
-        $this->assertArrayHasKey('message', $responseArray['error']);
+        $this->assertArrayHasKey('details', $responseArray);
+        $this->assertArrayHasKey('message', $responseArray);
     }
 
 
@@ -81,7 +80,6 @@ class ArticlesControllerTest extends TestCase
         $responseArray = json_decode($responseBody, true);
 
 
-        $this->assertArrayHasKey('article', $responseArray);
-        $this->assertEquals('8a83dbe9-cfdb-426c-bd0e-fcea336093ff', $responseArray['article']['id']);
+        $this->assertEquals('8a83dbe9-cfdb-426c-bd0e-fcea336093ff', $responseArray['id']);
     }
 }

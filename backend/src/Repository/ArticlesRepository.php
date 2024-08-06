@@ -56,8 +56,11 @@ class ArticlesRepository
     public function deleteArticleWithId(string $articleId, string $userId)
     {
 
-        $articleEntity = $this->articlesTable->find($articleId)
-            ->where(['user_id' => $userId])
+        $articleEntity = $this->articlesTable->find()
+            ->where([
+                'id' => $articleId,
+                'user_id' => $userId,
+            ])
             ->first();
 
         if (is_null($articleEntity)) {

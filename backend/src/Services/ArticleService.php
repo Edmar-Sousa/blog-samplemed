@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\ArticleNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Model\Entity\Article;
 use App\Repository\ArticlesRepository;
@@ -20,11 +21,14 @@ class ArticleService
 
 
 
-    private function serializeResponse(Response &$response, int $statusCode, array|Article $body)
+    private function serializeResponse(Response &$response, int $statusCode, array|Article|null $body = null)
     {
         $response = $response->withStatus($statusCode)
-            ->withType('application/json')
-            ->withStringBody(json_encode($body));
+            ->withType('application/json');
+
+
+        if (!is_null($body))
+            $response = $response->withStringBody(json_encode($body));
     }
 
 
@@ -73,10 +77,30 @@ class ArticleService
     }
 
 
+    public function deleteArticle(string $articleId, string $userId)
+    {
+        $response = new Response();
+        $this->articlesRepository->deleteArticleWithId($articleId, $userId);
+
+        $this->serializeResponse($response, 204);
+
+        return $response;
+    }
+
+
     private function handlerNotFoundException(Response &$response)
     {
         $error = [
             'message' => 'Artigo não encontrado',
+        ];
+
+        $this->serializeResponse($response, 404, $error);
+    }
+
+    private function handlerArticleNotFoundException(Response $response, ArticleNotFoundException $err)
+    {
+        $error = [
+            'message' => $err->getMessage(),
         ];
 
         $this->serializeResponse($response, 404, $error);
@@ -112,6 +136,8 @@ class ArticleService
             $this->handlerNotFoundException($response);
         else if ($err instanceof ValidationException)
             $this->handlerValidationExceptio($response, $err);
+        else if ($err instanceof ArticleNotFoundException)
+            $this->handlerArticleNotFoundException($response, $err);
         else
             $this->handlerInternalError($response);
 

@@ -31,7 +31,8 @@
 
 
             <section class="mt-6">
-                {{ article?.content }}
+                <div class="w-full" v-html="article?.content">
+                </div>
             </section>
         </div>
 

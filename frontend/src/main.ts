@@ -6,8 +6,11 @@ import './css/reset.css'
 import Primevue from 'primevue/config'
 import Aura from '@primevue/themes/lara'
 
+import { createPinia } from 'pinia'
+
 import { router } from './router'
 
+const pinia = createPinia()
 
 createApp(App)
     .use(Primevue, {
@@ -15,5 +18,6 @@ createApp(App)
             preset: Aura
         }
     })
+    .use(pinia)
     .use(router)
     .mount('#app')

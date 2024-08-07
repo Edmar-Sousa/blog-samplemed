@@ -39,10 +39,13 @@
 
 
 import { ref } from 'vue'
+import { email, helpers, required } from '@vuelidate/validators'
+import { loginUser } from '../services/user'
+import { useAuthStore } from '../stores/useAuth'
+import { useRouter } from 'vue-router'
+
 import TextInput from '../components/TextInput.vue'
 import useVuelidate from '@vuelidate/core'
-import { email, helpers, required } from '@vuelidate/validators'
-import { loginUser } from '../services/user';
 
 
 
@@ -64,6 +67,8 @@ const rules = {
 const v$ = useVuelidate(rules, loginForm)
 
 
+const authStore = useAuthStore()
+const router = useRouter()
 
 async function handlerSubmitForm() {
     v$.value.$validate()
@@ -71,7 +76,10 @@ async function handlerSubmitForm() {
     if (v$.value.$error)
         return 
 
-    console.log(await loginUser(loginForm.value))
+    const response = await loginUser(loginForm.value)
+    authStore.authUser(response.token, response.user)
+
+    router.push({ name: 'home' })
 }
 
 </script>

@@ -1,7 +1,7 @@
 <template>
 
 
-    <main class="mt-10 w-full max-w-[1100px] mx-auto px-4">
+    <main class="mt-10 w-full max-w-[1400px] mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template v-if="!isLoadding">
                 <card 
@@ -88,6 +88,7 @@ import { User, Clock } from 'lucide-vue-next'
 
 import { computed, onMounted } from 'vue'
 import { useArticlesStore } from '../stores/useArticles'
+import { formatDate } from '../utils/format'
 
 
 
@@ -102,18 +103,5 @@ onMounted(() => {
 const skeletonCards = new Array(4)
 const isLoadding = computed(() => articleStore.loading)
 
-
-
-function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    const options: Intl.DateTimeFormatOptions = {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    };
-
-    return date.toLocaleDateString('pt-BR', options);
-}
 
 </script>

@@ -1,3 +1,4 @@
+import { TagType } from './tags'
 import { UserType } from './user'
 
 
@@ -10,6 +11,12 @@ export interface ArticleType {
     modified: string
     user: UserType
     user_id: string
+}
+
+
+export interface ArticleViewType extends ArticleType {
+    content: string
+    tags: Array<TagType>
 }
 
 

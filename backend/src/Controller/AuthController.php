@@ -56,7 +56,8 @@ class AuthController extends AppController
             $token = $this->jwtRepository->generateToken($user->id);
 
             $this->set('token', $token);
-            $this->viewBuilder()->setOption('serialize', ['token']);
+            $this->set('user', $user);
+            $this->viewBuilder()->setOption('serialize', ['token', 'user']);
 
         } catch (Exception $err) {
 

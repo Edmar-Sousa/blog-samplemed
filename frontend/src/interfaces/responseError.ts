@@ -1,6 +1,6 @@
 
 
-export interface ResponseError {
+export interface ResponseError<T> {
     message: string
-    details: Array<Object>
+    details: T
 }

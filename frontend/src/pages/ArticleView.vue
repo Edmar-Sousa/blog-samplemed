@@ -1,7 +1,7 @@
 <template>
 
 
-    <main class="mt-10 w-full max-w-[1400px] mx-auto px-4 md:flex">
+    <main class="mt-10 w-full max-w-[1400px] mx-auto px-4 pb-20 md:flex">
 
         <div class="flex-1">
             <img 

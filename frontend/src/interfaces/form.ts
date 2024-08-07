@@ -12,3 +12,12 @@ export interface LoginSuccessType {
 }
 
 
+export interface LoginErrorType {
+    message: string
+    details: {
+        email?: string | null
+        password?: string | null
+    }
+}
+
+

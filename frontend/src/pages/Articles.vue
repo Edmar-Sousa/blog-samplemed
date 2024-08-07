@@ -1,11 +1,5 @@
 <template>
 
-    <header class="h-[80px] w-full">
-        <nav class="w-full max-w-[1100px] h-[80px] mx-auto flex items-center">
-            <h1 class="font-nunito text-3xl">Blog Semplemed</h1>
-        </nav>
-    </header>
-
 
     <main class="mt-10 w-full max-w-[1100px] mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -22,7 +16,9 @@
                         </template>
     
                         <template #title>
-                            {{ article.title }}
+                            <router-link :to="{ name: 'view-article', params: { id: article.id } }">
+                                    {{ article.title }}
+                            </router-link>
                         </template>
     
                         <template #content>

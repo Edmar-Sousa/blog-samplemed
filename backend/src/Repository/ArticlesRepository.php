@@ -39,6 +39,7 @@ class ArticlesRepository
                 'Articles.title',
                 'Articles.banner_image',
                 'Articles.user_id',
+                'Articles.created',
                 'Users.id',
                 'Users.username',
                 'Users.name'

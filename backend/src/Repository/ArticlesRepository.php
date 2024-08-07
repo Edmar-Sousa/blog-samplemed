@@ -34,6 +34,15 @@ class ArticlesRepository
         $paginator = new SimplePaginator();
 
         $articleQuery = $this->articlesTable->find()
+            ->select([
+                'Articles.id',
+                'Articles.title',
+                'Articles.banner_image',
+                'Articles.user_id',
+                'Users.id',
+                'Users.username',
+                'Users.name'
+            ])
             ->contain([
                 'Users' => [
                     'fields' => ['Users.id', 'Users.username', 'Users.name'],

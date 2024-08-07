@@ -13,17 +13,19 @@ export async function loginUser(loginForm: LoginForm): Promise<LoginSuccessType>
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
+
         return response.data
     }
 
     catch (err) {
-        if (axios.isAxiosError(err))
+        if (axios.isAxiosError(err)) {
             throw new LoginException(
-                err.response?.data.message,
-                err.response?.data.details
+                err.response?.data.error.message,
+                err.response?.data.error.details
             )
+        }
 
-        throw new Error('Erro ao fazer login')
+        throw err
     }
 
 }

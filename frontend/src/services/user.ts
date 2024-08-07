@@ -10,7 +10,7 @@ export async function loginUser(loginForm: LoginForm): Promise<LoginSuccessType>
     try {
         const response = await http.post('/api/auth/login.json', loginForm, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
         return response.data

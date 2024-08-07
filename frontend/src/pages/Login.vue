@@ -9,7 +9,7 @@
                 <text-input
                     type="text"
                     placeholder="E-mail"
-                    :error="v$.email?.$errors[0]?.$message"
+                    :error="v$.email?.$errors[0]?.$message ?? errors?.email"
                     v-model="loginForm.email" />
             </div>
 
@@ -18,7 +18,7 @@
                 <text-input
                     type="password"
                     placeholder="Senha"
-                    :error="v$.password?.$errors[0]?.$message"
+                    :error="v$.password?.$errors[0]?.$message ?? errors?.password"
                     v-model="loginForm.password" />
             </div>
 
@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router'
 
 import TextInput from '../components/TextInput.vue'
 import useVuelidate from '@vuelidate/core'
+import { LoginException } from '../Exception/LoginException'
 
 
 
@@ -66,9 +67,13 @@ const rules = {
 
 const v$ = useVuelidate(rules, loginForm)
 
-
 const authStore = useAuthStore()
 const router = useRouter()
+
+const errors = ref({
+    email: null,
+    password: null,
+})
 
 async function handlerSubmitForm() {
     v$.value.$validate()
@@ -76,10 +81,23 @@ async function handlerSubmitForm() {
     if (v$.value.$error)
         return 
 
-    const response = await loginUser(loginForm.value)
-    authStore.authUser(response.token, response.user)
+    try {
+        const response = await loginUser(loginForm.value)
+        authStore.authUser(response.token, response.user)
+    
+        router.push({ name: 'home' })
 
-    router.push({ name: 'home' })
+    }
+    catch (err) {
+
+        if (err instanceof LoginException) {
+            const errorsApi = err.getErrors()
+            /// @ts-ignore
+            errors.value = errorsApi
+        }
+
+        // TODO toas notification when erro 
+    }
 }
 
 </script>

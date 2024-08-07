@@ -53,8 +53,8 @@ class ArticlesController extends AppController
 
     public function index()
     {
-        $page = $this->request->getQuery('page', 1);
-        $perPage = $this->request->getQuery('per_page', 10);
+        $page = (int) $this->request->getQuery('page', 1);
+        $perPage = (int) $this->request->getQuery('per_page', 10);
 
         try {
             $articles = $this->articleService->getLatestArticles($page, $perPage);

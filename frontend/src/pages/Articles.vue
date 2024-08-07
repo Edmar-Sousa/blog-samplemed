@@ -2,6 +2,14 @@
 
 
     <main class="mt-10 w-full max-w-[1400px] mx-auto px-4">
+        <div class="text-right mb-10" v-if="authStore.authenticated">
+            <button
+                class="w-[150px] h-[65px] rounded-md bg-green-600 font-bold mt-4"
+                @click="visible = true">
+                    Escrever
+            </button>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template v-if="!isLoadding">
                 <card 
@@ -16,7 +24,9 @@
                         </template>
     
                         <template #title>
-                            <router-link :to="{ name: 'view-article', params: { id: article.id } }">
+                            <router-link 
+                                :to="{ name: 'view-article', params: { id: article.id } }"
+                                class="hover:text-green-600">
                                     {{ article.title }}
                             </router-link>
                         </template>
@@ -47,7 +57,7 @@
     
             </template>
     
-            <template v-if="isLoadding">
+            <template v-else>
                 <card 
                     v-for="card in skeletonCards"
                     :key="card"
@@ -75,23 +85,36 @@
         </div>
     </main>
 
+
+    <Dialog 
+        v-model:visible="visible" 
+        modal
+        header="Adicionar artigo"
+        class="w-full max-w-[800px]">
+    
+    </Dialog>
 </template>
 
 
 <script setup lang="ts">
 
 
+import { ref } from 'vue'
+
 import Card from 'primevue/card'
 import Skeleton from 'primevue/skeleton'
+import Dialog from 'primevue/dialog'
 
 import { User, Clock } from 'lucide-vue-next'
 
 import { computed, onMounted } from 'vue'
 import { useArticlesStore } from '../stores/useArticles'
 import { formatDate } from '../utils/format'
+import { useAuthStore } from '../stores/useAuth'
 
 
 
+const authStore = useAuthStore()
 const articleStore = useArticlesStore()
 
 
@@ -103,5 +126,6 @@ onMounted(() => {
 const skeletonCards = new Array(4)
 const isLoadding = computed(() => articleStore.loading)
 
+const visible = ref(false)
 
 </script>

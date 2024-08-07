@@ -67,20 +67,6 @@ import { formatDate } from '../utils/format'
 
 
 const route = useRoute()
-
-const tags = [
-    { title: 'Redes de computador', id: 'uojasudau' },
-    { title: 'Cpp', id: 'uojasudau' },
-    { title: 'Java', id: 'uojasudau' },
-    { title: 'Python', id: 'uojasudau' },
-    { title: 'Dart', id: 'uojasudau' },
-    { title: 'JsvaScript', id: 'uojasudau' },
-    { title: 'PHP', id: 'uojasudau' },
-    { title: 'Laravel', id: 'uojasudau' },
-]
-
-
-
 const article = ref<ArticleViewType>()
 
 

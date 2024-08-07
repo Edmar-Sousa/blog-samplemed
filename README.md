@@ -23,3 +23,11 @@ npm run dev
 # senha: 123
 
 ```
+
+# To-Do
+- [ ] mover a logica de UserController para dentro de UserServices
+- [x] mover a logica de ArticleController para dentro de ArticleService
+- [ ] criar controller de Commentarios
+- [ ] Pagina de cadastrar um Artigo
+- [ ] Pagina de editar perfil
+- [ ] Pagina de registro

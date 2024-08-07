@@ -11,3 +11,11 @@ export interface ArticleType {
     user: UserType
     user_id: string
 }
+
+
+export interface ArticleStoreType {
+    loading: boolean
+    error: boolean
+    errorMessage: string
+    articles: Array<ArticleType>
+}
